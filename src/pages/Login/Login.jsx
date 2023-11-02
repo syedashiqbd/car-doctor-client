@@ -14,7 +14,6 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     const form = e.target;
-    const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
     // const userinfo = { name, email, password };
@@ -24,16 +23,16 @@ const Login = () => {
         console.log(result.user);
 
         // get access token
-        const user = { email };
-        axios
-          .post('http://localhost:5000/jwt', user, { withCredentials: true })
-          .then((res) => {
-            console.log(res.data);
-            // navigate after login
-            if (res.data.success) {
-              navigate(location?.state ? location?.state : '/');
-            }
-          });
+        // const user = { email };
+        // axios
+        //   .post('http://localhost:5000/jwt', user, { withCredentials: true })
+        //   .then((res) => {
+        //     console.log(res.data);
+        //     // navigate after login
+        //     if (res.data.success) {
+        //     }
+        //   });
+        navigate(location?.state ? location?.state : '/');
       })
       .catch((err) => console.log(err));
   };
