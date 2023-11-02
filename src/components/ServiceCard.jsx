@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 
 const ServiceCard = ({ service }) => {
-  const { _id, img, title, price } = service;
+  // console.log(Object.keys(service).join(','));
+  const { _id, title, img, price } = service;
   return (
     <div className="card min-w-[364px] border p-5 rounded-lg ">
       <figure className="">
