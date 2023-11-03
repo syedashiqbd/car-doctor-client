@@ -1,24 +1,28 @@
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../provider/AuthProvider';
 import TableRow from '../../components/TableRow';
-import axios from 'axios';
+import useAxiosSecure from '../../hook/useAxiosSecure';
 
 const Order = () => {
   const { user } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
+  const axiosInstance = useAxiosSecure();
 
-  const url = `http://localhost:5000/bookings?email=${user?.email}`;
+  // const url = `https://car-doctor-server-orpin-eight.vercel.app/orders?email=${user?.email}`;
+
+  const url = `/orders?email=${user?.email}`; //base url setup in axiosInstance
 
   useEffect(() => {
-    axios.get(url).then((res) => {
-      setOrders(res.data);
-    });
-  }, [url]);
+    // axios.get(url, { withCredentials: true }).then((res) => {
+    //   setOrders(res.data);
+    // });
+    axiosInstance.get(url).then((res) => setOrders(res.data));
+  }, [url, axiosInstance]);
 
   const handleDelete = (id) => {
     const proceed = confirm('Are you sure want to delete?');
     if (proceed) {
-      fetch(`http://localhost:5000/bookings/${id}`, {
+      fetch(`https://car-doctor-server-orpin-eight.vercel.app/orders/${id}`, {
         method: 'DELETE',
       })
         .then((res) => res.json())
@@ -34,7 +38,7 @@ const Order = () => {
   };
 
   const handleApproved = (id) => {
-    fetch(`http://localhost:5000/bookings/${id}`, {
+    fetch(`https://car-doctor-server-orpin-eight.vercel.app/orders/${id}`, {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json',

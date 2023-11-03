@@ -7,6 +7,7 @@ import {
   signOut,
 } from 'firebase/auth';
 import app from '../firebase/firebase.config';
+import axios from 'axios';
 
 export const AuthContext = createContext();
 const auth = getAuth(app);
@@ -33,6 +34,35 @@ const AuthProvider = ({ children }) => {
       setUser(currentUser);
       console.log('Current User', currentUser);
       setLoading(false);
+      const userEmail = currentUser?.email || user?.email;
+      const loggedUser = { email: userEmail };
+
+      // generate token when user email is exist
+      if (currentUser) {
+        axios
+          .post(
+            'https://car-doctor-server-orpin-eight.vercel.app/jwt',
+            loggedUser,
+            {
+              withCredentials: true,
+            }
+          )
+          .then((res) => {
+            console.log(res.data);
+          });
+      } else {
+        axios
+          .post(
+            'https://car-doctor-server-orpin-eight.vercel.app/logout',
+            loggedUser,
+            {
+              withCredentials: true,
+            }
+          )
+          .then((res) => {
+            console.log(res.data);
+          });
+      }
     });
     return () => {
       return unsubscribe();

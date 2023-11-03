@@ -2,39 +2,32 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaFacebookF, FaLinkedinIn } from 'react-icons/fa';
 import login from '../../assets/images/login/login.svg';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
-import { AuthContext } from '../../provider/AuthProvider';
-import axios from 'axios';
+
+import useAuth from '../../hook/useAuth';
+import toast from 'react-hot-toast';
 
 const Login = () => {
-  const { signIn } = useContext(AuthContext);
+  const { signIn } = useAuth();
+
   const location = useLocation();
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
     // const userinfo = { name, email, password };
-
-    signIn(email, password)
-      .then((result) => {
+    const toastId = toast.loading('Logging in......');
+    try {
+      await signIn(email, password).then((result) => {
         console.log(result.user);
-
-        // get access token
-        // const user = { email };
-        // axios
-        //   .post('http://localhost:5000/jwt', user, { withCredentials: true })
-        //   .then((res) => {
-        //     console.log(res.data);
-        //     // navigate after login
-        //     if (res.data.success) {
-        //     }
-        //   });
+        toast.success('Successfully logged in!', { id: toastId });
         navigate(location?.state ? location?.state : '/');
-      })
-      .catch((err) => console.log(err));
+      });
+    } catch (error) {
+      toast.error(error.message, { id: toastId });
+    }
   };
 
   return (

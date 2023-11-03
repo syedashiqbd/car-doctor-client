@@ -25,7 +25,7 @@ const Checkout = () => {
     };
     console.log(order);
 
-    fetch('http://localhost:5000/bookings', {
+    fetch('https://car-doctor-server-orpin-eight.vercel.app/orders', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
